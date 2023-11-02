@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %} Post #{{idx}} {% endblock %}
+
+{% block body %}
+<h1>Post №{{idx}}</h1>
+{% if idx < posts|length %}
+    <h2>{{posts[idx]['title']}}</h2>
+    <p>{{posts[idx]['body']}}</p>
+    <p>Experience: {{posts[idx]['exp']}}</p>
+{% else %}
+    <p>Поста з індексом {{idx}} не існує</p>
+{% endif %}
+{% endblock %}

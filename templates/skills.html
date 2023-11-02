@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} POSTs {% endblock %}
+
+{% block body %}
+
+<h1>MY SKILLS</h1>
+<ul>
+    {% for post in posts %}
+    <li>
+        <a href="{{ url_for('skill', idx=loop.index - 1) }}"> {{post["exp"]}} : {{post["title"]}}</a>
+    </li>
+    {% endfor%}
+</ul>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %} About {% endblock %}
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+        <div class="container">
+        </div>
+    </nav>
+
+    <section id="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <p>My name is Andriy and I am a young student who is passionate about the world of information technologies. My journey into the world of IT began a few years ago, when I realized that technology is developing an important role in the modern world and is a key factor for the development of many industries.</p>
+
+
+            <img src="{{url_for('static', filename='img/my.jpg')}}" width="300">
+        </div>
+    </section>
+</body>
+</html>
+
+{% endblock %}

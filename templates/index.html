@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+    <h1>Feedback Form</h1>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert alert-success">
+        {{ messages[0] }}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name(size=40, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.feedback_text.label }}
+            {{ form.feedback_text(cols=50, rows=4, class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+
+    <h2>Feedback:</h2>
+    <ul>
+        {% for feedback in feedbacks %}
+        <li>
+            <strong>{{ feedback.name }}:</strong>
+            {{ feedback.feedback_text }}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+{% endblock %}

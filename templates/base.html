@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Base {% endblock %} - My Webpage</title>
+    {% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    {% endblock %}
+</head>
+<body>
+{% include "navbar.html" %}
+{% block body %}
+
+{% endblock %}
+</body>
+</html>
