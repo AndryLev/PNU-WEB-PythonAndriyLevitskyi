@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Form</title>
+</head>
+<body>
+    <form name=f1 method=post action="cgi-bin/form-submit.py">
+        <table>
+        <tr><td>First Name </td><td><input type=text name=f_name><td></tr>
+        <tr><td>Last Name</td><td> <input type=text name=s_name></td></tr>
+        <tr><td>Sex</td><td> <input type=radio name=r1 value=male> Male 
+        <input type=radio name=r1 value=female> Female </td></tr>
+        <tr><td>Group</td><td> <select name=my_group>
+        <option value='ipz31'>IPZ-31</option>
+        <option value='ipz32'>IPZ-32</option>
+        <option value='ipz33'>IPZ-33</option>
+        </select>
+         </td></tr>
+         <tr><td><input type=submit value=Submit></td><td> </td></tr>
+        </table>
+        </form>
+        <form action="cgi-bin/clear_cookies.py" method="post">
+            <input type="submit" value="Clear Cookies">
+        </form>
+</body>
+</html>
+
