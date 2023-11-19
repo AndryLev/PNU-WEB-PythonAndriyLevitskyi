@@ -2,8 +2,11 @@ import os
 from datetime import datetime, timedelta
 from flask import render_template, request, redirect, url_for, flash, session, make_response
 from app.data import posts
-from app import app, db, FeedbackForm, Feedback
+from app import app, db
+from app.forms import FeedbackForm, LoginForm
 import json
+
+from app.models import Feedback
 
 
 def _get_credentials_filepath(filename="data/users.json", ):
@@ -16,9 +19,35 @@ with open(_get_credentials_filepath(), 'r') as f:
     users = json.load(f)
 
 
-@app.route('/login')
+# @app.route('/login')
+# def login():
+#     return render_template("login.html")
+
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        name = form.name.data
+        password = form.password.data
+        remember = bool(request.form.get("remember"))
+
+        if name in users and users[name] == password:
+            session["username"] = name
+            if remember:
+
+                session.permanent = True
+                app.permanent_session_lifetime = timedelta(days=730)
+            else:
+
+                app.permanent_session_lifetime = timedelta(minutes=25)
+            flash('Login successful', 'success')
+            return redirect(url_for("info"))
+        else:
+            flash('Invalid username or password', 'danger')
+            return redirect(url_for("login"))
+
+    return render_template("login.html", form=form)
 
 
 @app.route('/login/user', methods=["GET", "POST"])
