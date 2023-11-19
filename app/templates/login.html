@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+{{ super() }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="/login/user" method="post">
+        <label for="name">Username:</label>
+        <input type="text" name="name" required>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        <button type="submit">Login</button>
+    </form>
+</body>
+</html>
+{% endblock %}
