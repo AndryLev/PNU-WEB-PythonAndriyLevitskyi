@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 from flask import render_template, request, redirect, url_for, flash, session, make_response
 from app.data import posts
 from app import app, db
-from app.forms import FeedbackForm, LoginForm
+from app.forms import FeedbackForm, LoginForm, TodoForm
 import json
 
-from app.models import Feedback
+from app.models import Feedback, Todo
 
 
 def _get_credentials_filepath(filename="data/users.json", ):
@@ -200,3 +200,37 @@ def skill(idx=None):
         return render_template("skill.html", posts=posts, idx=idx)
     else:
         return render_template("skills.html", posts=posts)
+
+
+@app.route('/todo', methods=['POST', 'GET'])
+def todo():
+    todo_list = Todo.query.all()
+    form = TodoForm()
+    return render_template("todo.html", todo_list=todo_list, form=form)
+
+
+@app.route("/add", methods=["POST"])
+def todo_add():
+    form = TodoForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        new_todo = Todo(title=title, complete=False)
+        db.session.add(new_todo)
+        db.session.commit()
+    return redirect(url_for("todo"))
+
+
+@app.route("/update/<int:todo_id>")
+def todo_update(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    todo.complete = not todo.complete
+    db.session.commit()
+    return redirect(url_for("todo"))
+
+
+@app.route("/delete/<int:todo_id>")
+def todo_delete(todo_id):
+    todo = Todo.query.get_or_404(todo_id)
+    db.session.delete(todo)
+    db.session.commit()
+    return redirect(url_for("todo"))

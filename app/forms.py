@@ -14,3 +14,8 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=4, max=10)])
     remember = BooleanField('Remember me')
     submit = SubmitField('Login')
+
+
+class TodoForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    submit = SubmitField('Save')
