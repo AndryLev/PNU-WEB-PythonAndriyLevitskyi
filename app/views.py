@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 from flask import render_template, request, redirect, url_for, flash, session, make_response
 from app.data import posts
 from app import app, db
-from app.forms import FeedbackForm, LoginForm, TodoForm
+from app.forms import FeedbackForm, LoginForm, TodoForm, RegistrationForm
 import json
 
-from app.models import Feedback, Todo
+from app.models import Feedback, Todo, User
 
 
 def _get_credentials_filepath(filename="data/users.json", ):
@@ -23,43 +23,56 @@ with open(_get_credentials_filepath(), 'r') as f:
 # def login():
 #     return render_template("login.html")
 
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        try:
+            user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Account successfully created for {form.username.data}!', 'success')
+            return redirect(url_for('login'))
+        except Exception as e:
+            flash(f'An error occurred: {str(e)}', 'danger')
+            db.session.rollback()
+    return render_template('register.html', form=form)
+
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        name = form.name.data
-        password = form.password.data
-        remember = bool(request.form.get("remember"))
+        user = User.query.filter_by(email=form.email.data).first()
 
-        if name in users and users[name] == password:
-            session["username"] = name
-            if remember:
+        if user and user.verify_password(form.password.data):
+            # login_user(user, remember=form.remember.data)
 
-                session.permanent = True
-                app.permanent_session_lifetime = timedelta(days=730)
-            else:
+            flash('Login successful!', 'success')
+            return redirect(url_for('myuser'))
 
-                app.permanent_session_lifetime = timedelta(minutes=25)
-            flash('Login successful', 'success')
-            return redirect(url_for("info"))
-        else:
-            flash('Invalid username or password', 'danger')
-            return redirect(url_for("login"))
+        flash('Invalid email or password', 'danger')
 
-    return render_template("login.html", form=form)
+    return render_template('login.html', form=form)
+
+@app.route('/myuser')
+def myuser():
+    users_list = User.query.all()
+    total_users = len(users_list)
+    return render_template('myuser.html', users_list=users_list, total_users=total_users)
 
 
-@app.route('/login/user', methods=["GET", "POST"])
-def login_user():
-    if request.method == "POST":
-        name = request.form.get("name")
-        password = request.form.get("password")
-
-        if name in users and users[name] == password:
-            session["username"] = name
-            return redirect(url_for("info"))
-    return redirect(url_for("login"))
+# @app.route('/login/user', methods=["GET", "POST"])
+# def login_user():
+#     if request.method == "POST":
+#         name = request.form.get("name")
+#         password = request.form.get("password")
+#
+#         if name in users and users[name] == password:
+#             session["username"] = name
+#             return redirect(url_for("info"))
+#     return redirect(url_for("login"))
 
 
 @app.route('/info', methods=["GET", "POST"])
@@ -73,7 +86,6 @@ def info():
         return render_template("info.html", username=user, user_cookies=user_cookies)
     else:
         return redirect(url_for("login"))
-
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():

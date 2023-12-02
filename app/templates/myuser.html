@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Registered Users{% endblock %}
+
+{% block body %}
+    <h2 class="mb-4">All Users</h2>
+
+    {% if total_users == 0 %}
+        <p>No registered users yet.</p>
+    {% else %}
+        <ul>
+            {% for user in users_list %}
+                <li>{{ user.username }} - {{ user.email }}</li>
+            {% endfor %}
+        </ul>
+        <p>Total Users: {{ total_users }}</p>
+    {% endif %}
+{% endblock %}

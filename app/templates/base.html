@@ -5,6 +5,7 @@
     <title>{% block title %} Base {% endblock %} - My Webpage</title>
     {% block css %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     {% endblock %}
 </head>
 <body>
