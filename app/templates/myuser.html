@@ -1,18 +1,58 @@
 {% extends "base.html" %}
-
-{% block title %}Registered Users{% endblock %}
+{% from "macros.html" import render_field %}
 
 {% block body %}
-    <h2 class="mb-4">All Users</h2>
+<div class="container mt-5">
+    <h2 class="mb-4">Account Information</h2>
 
-    {% if total_users == 0 %}
-        <p>No registered users yet.</p>
-    {% else %}
-        <ul>
-            {% for user in users_list %}
-                <li>{{ user.username }} - {{ user.email }}</li>
-            {% endfor %}
-        </ul>
-        <p>Total Users: {{ total_users }}</p>
-    {% endif %}
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='profile_photos/' + current_user.image_file) }}" alt="Profile photo" class="img-fluid mb-3">
+            <p><strong>Username:</strong> {{ current_user.username }}</p>
+            <p><strong>Email:</strong> {{ current_user.email }}</p>
+            <h3 class="mt-4">About Me</h3>
+            <p>{{ current_user.about_me }}</p>
+            <h3 class="mt-4">Last Seen</h3>
+            <p>{{ current_user.last_seen.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        </div>
+
+        <div class="col-md-8">
+            <div>
+                <h3 class="title mt-4">Change password</h3>
+         <form method="post" action="{{ url_for('change_password') }}" id="change_password_form" novalidate>
+    {{ change_password_form.csrf_token }}
+    {{ render_field(change_password_form.current_password, class="your-custom-class", placeholder="Your Placeholder") }}
+    {{ render_field(change_password_form.new_password, class="your-custom-class", placeholder="Your Placeholder") }}
+    {{ render_field(change_password_form.confirm_password, class="your-custom-class", placeholder="Your Placeholder") }}
+    {{ render_field(change_password_form.submit, class="btn btn-primary") }}
+         </form>
+
+            </div>
+
+            <h3 class="mt-4">Update profile information</h3>
+            <form method="POST" action="{{ url_for('update_users') }}" enctype="multipart/form-data">
+                {{ update_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ update_form.username.label(class="form-label") }}
+                    {{ update_form.username(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ update_form.email.label(class="form-label") }}
+                    {{ update_form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ update_form.about_me.label(class="form-label") }}
+                    {{ update_form.about_me(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ update_form.profile_photo.label(class="form-label") }}
+                    {{ update_form.profile_photo(class="form-control-file") }}
+                </div>
+                <div class="form-group">
+                    {{ update_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
