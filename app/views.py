@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, timedelta
 from flask import render_template, request, redirect, url_for, flash, session, make_response
+from flask_login import login_user, current_user, logout_user, login_required
 from app.data import posts
 from app import app, db
 from app.forms import FeedbackForm, LoginForm, TodoForm, RegistrationForm
@@ -25,6 +26,8 @@ with open(_get_credentials_filepath(), 'r') as f:
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         try:
@@ -41,13 +44,15 @@ def register():
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('register'))
     form = LoginForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user and user.verify_password(form.password.data):
-            # login_user(user, remember=form.remember.data)
+            login_user(user, remember=form.remember.data)
 
             flash('Login successful!', 'success')
             return redirect(url_for('myuser'))
@@ -56,7 +61,14 @@ def login():
 
     return render_template('login.html', form=form)
 
+@app.route("/logout")
+def logout():
+    logout_user()
+    flash('You have been logged out', 'success')
+    return redirect(url_for('home'))
+
 @app.route('/myuser')
+@login_required
 def myuser():
     users_list = User.query.all()
     total_users = len(users_list)
@@ -87,10 +99,10 @@ def info():
     else:
         return redirect(url_for("login"))
 
-@app.route('/logout', methods=["GET", "POST"])
-def logout():
-    session.pop('username', None)
-    return redirect(url_for("login"))
+# @app.route('/logout', methods=["GET", "POST"])
+# def logout():
+#     session.pop('username', None)
+#     return redirect(url_for("login"))
 
 
 @app.route('/add_cookie', methods=["POST"])
