@@ -21,7 +21,7 @@
                             <h4 class="text-center my-3 pb-3">To Do - Form</h4>
 
                             <!-- WTForms Form -->
-                            <form class="row" method="post" action="{{ url_for('todo_add') }}">
+                            <form class="row" method="post" action="{{ url_for('.todo_add') }}">
                                 {{ form.hidden_tag() }}
                                 <div class="col-4">
                                     <div class="form-outline">
@@ -55,8 +55,8 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a class="btn btn-success" href="{{ url_for('todo_update', todo_id=todo.id) }}">Update</a>
-                                            <a class="btn btn-danger ms-1" href="{{ url_for('todo_delete', todo_id=todo.id) }}">Delete</a>
+                                            <a class="btn btn-success" href="{{ url_for('.todo_update', todo_id=todo.id) }}">Update</a>
+                                            <a class="btn btn-danger ms-1" href="{{ url_for('.todo_delete', todo_id=todo.id) }}">Delete</a>
                                         </td>
                                     </tr>
                                     {% endfor %}

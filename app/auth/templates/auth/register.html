@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-header bg-primary text-white text-center">Register</div>
                     <div class="card-body">
-                        <form method="POST" novalidate>
+                        <form method="POST" novalidate action="{{ url_for('.register') }}">
                             {{ form.csrf_token }}
 
                             {{ render_field(form.username, class_='custom-class', placeholder='Username') }}

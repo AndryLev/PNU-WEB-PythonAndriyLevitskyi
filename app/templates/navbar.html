@@ -2,15 +2,14 @@
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
   <h5 class="my-0 mr-md-auto font-weight-normal">Andry Website</h5>
   <nav class="my-2 my-md-0 mr-md-3">
-    <a class="p-2 text-dark" href="{{ url_for('home') }}">Home</a>
-    <a class="p-2 text-dark" href="{{ url_for('index') }}">Form</a>
-    <a class="p-2 text-dark" href="{{ url_for('about') }}">About</a>
-      <a class="p-2 text-dark" href="{{ url_for('skill') }}">My Skills</a>
-{#      <a class="p-2 text-dark" href="{{ url_for('login') }}">Log in</a>#}
-      <a class="p-2 text-dark" href="{{ url_for('myuser') }}">My Profile</a></li>
-      <a class="p-2 text-dark" href="{{ url_for('logout') }}">Logout</a></li>
-      <a class="p-2 text-dark" href="{{ url_for('register') }}">Register</a>
-      <a class="p-2 text-dark" href="{{ url_for('todo') }}">To do</a>
+    <a class="p-2 text-dark" href="{{ url_for('portfolio.home') }}">Home</a>
+    <a class="p-2 text-dark" href="{{ url_for('feedback.index') }}">Form</a>
+    <a class="p-2 text-dark" href="{{ url_for('portfolio.about') }}">About</a>
+      <a class="p-2 text-dark" href="{{ url_for('portfolio.skill') }}">My Skills</a>
+      <a class="p-2 text-dark" href="{{ url_for('auth.myuser') }}">My Profile</a></li>
+      <a class="p-2 text-dark" href="{{ url_for('auth.logout') }}">Logout</a></li>
+      <a class="p-2 text-dark" href="{{ url_for('auth.register') }}">Register</a>
+      <a class="p-2 text-dark" href="{{ url_for('todo.todo') }}">To do</a>
   </nav>
-  <a class="btn btn-outline-primary" href="{{ url_for('login') }}">Sign up</a>
+  <a class="btn btn-outline-primary" href="{{ url_for('auth.login') }}">Sign up</a>
 </div>

@@ -1,18 +1,22 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, PasswordField, BooleanField
-from wtforms.validators import DataRequired, Length, Regexp, Email, EqualTo, ValidationError
-from flask_login import current_user
-from app.models import User
 from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, SubmitField, PasswordField, BooleanField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
+from flask_login import current_user
+from .models import User
+
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField(label='Current Password', validators=[DataRequired(message="This field is required."), Length(min=6, message='Password must be more than 6 characters long')])
     new_password = PasswordField(label='New Password', validators=[DataRequired(message="This field is required."), Length(min=6, message='Password must be more than 6 characters long')])
     confirm_password = PasswordField(label='Confirm New Password', validators=[DataRequired(message="This field is required."), Length(min=6, message='Password must be more than 6 characters long')])
     submit = SubmitField("Change password")
 
+
     def validate_current_password(self, field):
         if not current_user.verify_password(field.data):
             raise ValidationError('Incorrect current password. Please try again.')
+
+
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -21,11 +25,6 @@ class UpdateAccountForm(FlaskForm):
     about_me = StringField('About Me', validators=[Length(max=140)])
     submit = SubmitField('Update')
 
-class FeedbackForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    feedback_text = TextAreaField('Feedback', validators=[DataRequired()])
-    submit = SubmitField('Send')
-
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -33,10 +32,6 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember me')
     submit = SubmitField('Login')
 
-
-class TodoForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    submit = SubmitField('Save')
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(message="This field is required"), Length(min=4, max=20),
