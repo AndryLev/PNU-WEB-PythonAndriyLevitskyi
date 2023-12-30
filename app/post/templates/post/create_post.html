@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_field %}
+{% block title %} Create Post{% endblock %}
+{% block body %}
+
+<div style="text-align: center; padding-top: 20px;">
+    <h2 class="title">
+         Add your post</h2>
+</div>
+<div class="card mx-auto" style="max-width: 60%;">
+    <div class="card-body">
+        <form class="form" method="post" action="{{ url_for('.create') }}" novalidate enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{ render_field(form.title) }}
+            {{ render_field(form.text) }}
+            {{ render_field(form.type) }}
+            {{ render_field(form.category) }}
+
+
+            {{ render_field(form.tags, placeholder="Enter tags separated by commas") }}
+
+            <div class="form-group">
+                <label for="picture">Image</label>
+                <div class="custom-file">
+                    <label class="custom-file-label" for="picture" id="custom-file-label">{{ form.image.label }}</label>
+                    {{ render_field(form.image, class_='custom-file-input', id='picture') }}
+
+                    {% if form.image.errors %}
+                        <br><br>
+                        <ul class="errors">
+                            {% for error in form.image.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            {{ render_field(form.submit, class="btn-round btn btn-primary btn-lg") }}
+        </form>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block body %}
+<div style="text-align: center; padding-top: 20px;">
+    <h1 class="title">
+        All posts
+    </h1>
+</div>
+
+<div class="table-container">
+    <Table responsive>
+        <thead>
+            <tr>
+                <th className="text-center">Title</th>
+                <th className="text-center">Image</th>
+                <th className="text-center">Text</th>
+                <th className="text-center">Type</th>
+                <th className="text-center">Category</th>
+                <th className="text-center">Tags</th>
+                <th className="text-center">Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+            <tr>
+                <td class="text-center">
+                    <a href="{{ url_for('.view_post', post_id=post.id) }}">{{ post.title }}</a>
+                </td>
+                <td class="text-center">
+                    <img alt="..." class="img-fluid rounded shadow-lg" src="{{ url_for('static', filename='postimg/' + post.image) }}" style="width: 150px; height: 150px;">
+                </td>
+                <td class="value-cell">{{ post.text[:100] }}{% if post.text|length > 100 %}...{% endif %}</td>
+                <td class="text-center">{{ post.type }}</td>
+                <td class="text-center">{{ post.category.name }}</td>
+                <td class="text-center">
+                    {% for tag in post.tags %}
+                        <span class="badge badge-primary">{{ tag.name }}</span>
+                    {% endfor %}
+                </td>
+                <td class="text-center">{{ post.created.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </Table>
+    <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+            <li class="page-item {% if not posts.has_prev %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for(".posts", page=posts.prev_num) }}"
+                   tabindex="-1"><</a>
+            </li>
+
+            {% for page in posts.iter_pages(left_edge=1, left_current=2, right_current=2, right_edge=1) %}
+                <li class="page-item {% if page == posts.page %}active{% endif %}">
+                    <a class="page-link"
+                       href="{{ url_for(".posts", page=page) }}">
+                        {{ page or "..." }}
+                    </a>
+                </li>
+            {% endfor %}
+
+            <li class="page-item {% if not posts.has_next %}disabled{% endif %}">
+                <a class="page-link"
+                   href="{{ url_for(".posts", page=posts.next_num) }}">></a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+{% endblock %}
+

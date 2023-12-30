@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% from "macros.html" import render_field %}
+{% block title %} Edit post{% endblock %}
+
+{% block body %}
+
+<div id="edit_post_section" style="text-align: center;">
+    <h1 class="title">Edit post</h1>
+</div>
+<div class="card mx-auto" style="max-width: 60%;">
+    <div class="card-body">
+        <form method="post" action="{{ url_for('.edit_post', post_id=post.id) }}" id="edit_post_form" novalidate enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            {{ render_field(form.title)}}
+            {{ render_field(form.text)}}
+            {{ render_field(form.type)}}
+            {{ render_field(form.category)}}
+            {{ render_field(form.tags) }}
+            <div class="form-group">
+                <label for="picture">Image</label>
+                <div class="custom-file">
+                    <label class="custom-file-label" for="picture" id="custom-file-label">{{ form.image.label }}</label>
+                    {{ render_field(form.image, show_label=false, show_errors=false, id='picture') }}
+
+                    {% if form.image.errors %}
+                        <br><br>
+                        <ul class="errors">
+                            {% for error in form.image.errors %}
+                                <p class="danger">{{ error }}</p>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            {{ form.submit(class="btn-round btn btn-primary btn-lg") }}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

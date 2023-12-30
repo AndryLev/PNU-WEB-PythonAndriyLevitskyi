@@ -44,5 +44,7 @@ def create_app(config_name="default"):
         from .api import api_blueprint
         app.register_blueprint(api_blueprint)
 
+        from .post import post_blueprint
+        app.register_blueprint(post_blueprint)
     return app
 
