@@ -3,7 +3,7 @@ from app.todo.models import Todo
 from . import api_blueprint
 from app import db
 from sqlalchemy.exc import IntegrityError
-
+from app.auth_api.views import required_token
 
 @api_blueprint.route('/ping', methods=["GET", "POST"])
 def ping():
@@ -24,6 +24,7 @@ def todos_get(todo_id):
     return jsonify(todo.as_dict()), 200
 
 @api_blueprint.route('/todos', methods=['POST'])
+@required_token
 def create_todos():
     try:
         data = request.get_json()
@@ -42,6 +43,7 @@ def create_todos():
         return jsonify({'error': str(e)}), 500
 
 @api_blueprint.route('/todos/<int:todo_id>', methods=['PUT'])
+@required_token
 def update_todos(todo_id):
     todo = Todo.query.get(todo_id)
     if not todo:
@@ -58,6 +60,7 @@ def update_todos(todo_id):
     return jsonify(todo_dict), 200
 
 @api_blueprint.route('/todos/<int:todo_id>', methods=['DELETE'])
+@required_token
 def delete_todos(todo_id):
     todo = Todo.query.get(todo_id)
     if not todo:

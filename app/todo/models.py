@@ -9,5 +9,5 @@ class Todo(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "completed": self.complete,
+            "complete": self.complete,
         }

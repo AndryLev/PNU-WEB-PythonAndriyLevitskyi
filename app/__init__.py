@@ -46,5 +46,8 @@ def create_app(config_name="default"):
 
         from .post import post_blueprint
         app.register_blueprint(post_blueprint)
+
+        from .auth_api import auth_api_blueprint
+        app.register_blueprint(auth_api_blueprint)
     return app
 
