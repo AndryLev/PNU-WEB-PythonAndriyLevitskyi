@@ -8,6 +8,12 @@ from PIL import Image
 from werkzeug.utils import secure_filename
 from .models import User
 from . import auth_blueprint
+from flask import current_app
+
+@current_app.context_processor
+def inject_is_authenticated():
+    from flask_login import current_user
+    return dict(is_authenticated=(current_user and current_user.is_authenticated))
 
 @auth_blueprint.route("/register", methods=['GET', 'POST'])
 def register():
@@ -47,13 +53,12 @@ def login():
 
     return render_template('auth/login.html', form=form)
 
+
 @auth_blueprint.route("/logout")
 def logout():
     logout_user()
     flash('You have been logged out', 'success')
     return redirect(url_for('.login'))
-
-
 
 
 @auth_blueprint.route('/myuser')
