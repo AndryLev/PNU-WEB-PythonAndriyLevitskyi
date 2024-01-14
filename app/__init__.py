@@ -56,5 +56,8 @@ def create_app(config_name="default"):
 
         from .swagger import swagger_bp
         app.register_blueprint(swagger_bp)
+
+        from .sport import sport_events_api_bp
+        app.register_blueprint(sport_events_api_bp)
     return app
 
