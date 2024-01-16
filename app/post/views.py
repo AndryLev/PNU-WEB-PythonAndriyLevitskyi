@@ -62,7 +62,10 @@ def view_post(post_id):
 @post_blueprint.route('/post/<int:post_id>/edit', methods=['GET', 'POST'])
 def edit_post(post_id):
     post = Post.query.get_or_404(post_id)
-    form = EditPostForm(obj=post)
+    if request.method == 'get':
+        form = EditPostForm(obj=post)
+    else:
+        form = EditPostForm()
 
     form.category.choices = [(category.id, category.name) for category in Category.query.all()]
     form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
@@ -94,10 +97,10 @@ def edit_post(post_id):
                 post.tags.remove(tag)
 
             db.session.commit()
-            flash('Пост оновлено успішно!', 'success')
+            flash('Post updated successfully!', 'success')
         except Exception as e:
             db.session.rollback()
-            flash(f"Не вдалося оновити! Помилка: {str(e)}", category="danger")
+            flash(f"Failed to update! Error: {str(e)}", category="danger")
 
         return redirect(url_for('.view_post', post_id=post.id))
 
