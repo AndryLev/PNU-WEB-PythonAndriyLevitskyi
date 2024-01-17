@@ -62,10 +62,7 @@ def view_post(post_id):
 @post_blueprint.route('/post/<int:post_id>/edit', methods=['GET', 'POST'])
 def edit_post(post_id):
     post = Post.query.get_or_404(post_id)
-    if request.method == 'get':
-        form = EditPostForm(obj=post)
-    else:
-        form = EditPostForm()
+    form = EditPostForm(obj=post)
 
     form.category.choices = [(category.id, category.name) for category in Category.query.all()]
     form.tags.choices = [(tag.id, tag.name) for tag in Tag.query.all()]
